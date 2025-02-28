@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: face-recognition-attendance
+    env: python
+    buildCommand: |
+      apt-get update && apt-get install -y python3-dev python3-numpy
+      pip install --upgrade pip wheel setuptools
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: PYTHONPATH
+        value: /usr/lib/python3/dist-packages
+    packages:
+      - build-essential
+      - python3-dev
+      - python3-numpy
+      - python3-scipy
+      - cmake
+      - libopenblas-dev
+    postDeploy:
+      - chmod -R 777 data/Images
+      - chmod -R 777 data/Records

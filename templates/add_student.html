@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Student</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .video-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        #video-feed {
+            max-width: 100%;
+            height: auto;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .capture-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .save-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+        .back-btn {
+            background-color: #f44336;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+        #preview {
+            max-width: 320px;
+            margin: 10px auto;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Student</h1>
+        <div class="video-container">
+            <video id="video-feed" autoplay></video>
+            <img id="preview" src="" alt="Preview">
+            <br>
+            <button class="btn capture-btn" onclick="capturePhoto()">Take Photo</button>
+        </div>
+        <div class="form-container">
+            <form id="student-form" action="{{ url_for('save_student') }}" method="post" enctype="multipart/form-data">
+                <input type="text" name="student_name" placeholder="Student Name" required>
+                <input type="hidden" name="photo" id="photo-data">
+                <br>
+                <button type="submit" class="btn save-btn">Save Student</button>
+            </form>
+            <a href="{{ url_for('index') }}" class="btn back-btn">Back</a>
+        </div>
+    </div>
+
+    <script>
+        let video = document.getElementById('video-feed');
+        let preview = document.getElementById('preview');
+        let photoData = document.getElementById('photo-data');
+
+        // Access webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Error accessing webcam:", err);
+            });
+
+        function capturePhoto() {
+            let canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            // Show preview
+            preview.src = canvas.toDataURL('image/jpeg');
+            preview.style.display = 'block';
+            video.style.display = 'none';
+            
+            // Store photo data
+            photoData.value = canvas.toDataURL('image/jpeg');
+        }
+    </script>
+</body>
+</html>
