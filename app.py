@@ -11,6 +11,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+import face_recognition as fr  # Add this import
 
 app = Flask(__name__)
 video_stream = None
@@ -189,32 +190,47 @@ def save_student():
         image_data = base64.b64decode(photo_data.split(',')[1])
         
         # Create images directory if it doesn't exist
-        image_dir = "data/Images"  # Relative path
+        image_dir = "data/Images"
         try:
             os.makedirs(image_dir, exist_ok=True)
         except OSError as e:
             print(f"Error creating directory: {e}")
             return "Error creating directory", 500
         
-        # Save the image
-        image_path = os.path.join(image_dir, f"{student_name}.jpg")
+        # Save the image temporarily to verify face
+        temp_path = os.path.join(image_dir, "temp.jpg")
         try:
-            with open(image_path, 'wb') as f:
+            with open(temp_path, 'wb') as f:
                 f.write(image_data)
-        except IOError as e:
-            print(f"Error writing image file: {e}")
-            return "Error writing image file", 500
             
-        # Reload face encodings
-        global faces, encoded_faces, faces_names
-        faces = face.encode_faces()
-        encoded_faces = list(faces.values())
-        faces_names = list(faces.keys())
-        
-        return redirect(url_for('index'))
+            # Check if image contains a face
+            img = fr.load_image_file(temp_path)
+            face_locations = fr.face_locations(img)
+            
+            if not face_locations:
+                os.remove(temp_path)
+                return "No face detected in image. Please try again.", 400
+            
+            # If face detected, save with actual name
+            os.rename(temp_path, os.path.join(image_dir, f"{student_name}.jpg"))
+            
+            # Reload face encodings
+            global faces, encoded_faces, faces_names
+            faces = face.encode_faces()
+            encoded_faces = list(faces.values())
+            faces_names = list(faces.keys())
+            
+            return redirect(url_for('index'))
+            
+        except Exception as e:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+            print(f"Error processing image: {e}")
+            return "Error processing image. Please try again.", 500
+            
     except Exception as e:
         print(f"Error saving student: {e}")
-        return "Error saving student", 500
+        return "Error saving student. Please try again.", 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
