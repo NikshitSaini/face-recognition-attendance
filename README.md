@@ -1,4 +1,8 @@
-Project Structure:
+# Face Recognition Attendance System
+
+A web-based attendance system using face recognition technology.
+
+## Project Structure
 
 ├── app.py              # Flask application
 ├── face.py            # Face recognition logic
@@ -8,9 +12,6 @@ Project Structure:
 └── data/             # Data directories
     ├── Images/       # Student images
     └── Records/      # Attendance records
-# Face Recognition Attendance System
-
-A web-based attendance system using face recognition technology.
 
 ## Features
 - Face detection and recognition
