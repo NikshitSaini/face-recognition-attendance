@@ -121,49 +121,58 @@ def done():
     if video_stream:
         video_stream.stop()
         video_stream = None
-    
-    # Send attendance email if class was selected
-    if selected_class:
-        try:
-            # Setup email
-            email_sender = config.email_sender
-            password = config.password
-            receiver_email = config.receiver_email
-            
-            # Create message
-            msg = MIMEMultipart()
-            msg['From'] = email_sender
-            msg['To'] = receiver_email
-            msg['Subject'] = f"Attendance Record for {selected_class}"
-            
-            # Add body
-            body = f"Please find attached the attendance record for {selected_class}."
-            msg.attach(MIMEText(body, 'plain'))
-            
-            # Attach attendance file
-            today = time.strftime('%d_%m_%Y')
-            record_file = f"data/Records/Record_{selected_class}_{today}.csv"
-            
-            if os.path.exists(record_file):
-                with open(record_file, 'rb') as attachment:
-                    part = MIMEBase('application', 'octet-stream')
-                    part.set_payload(attachment.read())
-                    encoders.encode_base64(part)
-                    part.add_header('Content-Disposition', f'attachment; filename="{os.path.basename(record_file)}"')
-                    msg.attach(part)
-                
-                # Send email
-                server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                server.login(email_sender, password)
-                text = msg.as_string()
-                server.sendmail(email_sender, receiver_email, text)
-                server.quit()
-                print("Attendance email sent successfully!")
-            
-        except Exception as e:
-            print(f"Error sending attendance email: {e}")
-    
     selected_class = None
+    return redirect(url_for('index'))
+
+@app.route('/send_email')
+def send_email():
+    global video_stream, selected_class  # Add global variables
+    try:
+        # Setup email
+        email_sender = config.email_sender
+        password = config.password
+        receiver_email = config.receiver_email
+        
+        # Create message
+        msg = MIMEMultipart()
+        msg['From'] = email_sender
+        msg['To'] = receiver_email
+        msg['Subject'] = f"Attendance Record for {selected_class}"
+        
+        # Add body
+        body = f"Please find attached the attendance record for {selected_class}."
+        msg.attach(MIMEText(body, 'plain'))
+        
+        # Attach attendance file
+        today = time.strftime('%d_%m_%Y')
+        record_file = f"data/Records/Record_{selected_class}_{today}.csv"
+        
+        if os.path.exists(record_file):
+            with open(record_file, 'rb') as attachment:
+                part = MIMEBase('application', 'octet-stream')
+                part.set_payload(attachment.read())
+                encoders.encode_base64(part)
+                part.add_header('Content-Disposition', f'attachment; filename="{os.path.basename(record_file)}"')
+                msg.attach(part)
+            
+            # Send email
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login(email_sender, password)
+            text = msg.as_string()
+            server.sendmail(email_sender, receiver_email, text)
+            server.quit()
+            print("Attendance email sent successfully!")
+            
+    except Exception as e:
+        print(f"Error sending attendance email: {e}")
+    
+    finally:
+        # Stop the video stream before redirecting
+        if video_stream:
+            video_stream.stop()
+            video_stream = None
+        selected_class = None
+        
     return redirect(url_for('index'))
 
 @app.route('/add_student')

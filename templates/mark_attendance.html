@@ -66,6 +66,24 @@
         .done-btn:hover {
             background-color: #1976D2;
         }
+        .button-container {
+            margin-top: 20px;
+        }
+        .done-btn, .send-email-btn {
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .send-email-btn {
+            background-color: #4CAF50;
+        }
     </style>
 </head>
 <body>
@@ -76,7 +94,10 @@
         <div class="video-container">
             <img id="video-feed" src="{{ url_for('video_feed') }}" alt="Video feed">
         </div>
-        <a href="{{ url_for('done') }}" class="done-btn">Done</a>
+        <div class="button-container">
+            <a href="{{ url_for('done') }}" class="done-btn">Done</a>
+            <a href="{{ url_for('send_email') }}" class="send-email-btn">Send Email</a>
+        </div>
     </div>
 </body>
 </html>
