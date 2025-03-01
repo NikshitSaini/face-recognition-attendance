@@ -3,7 +3,14 @@ import face
 import cv2
 import sys
 import os
+import time  # Add this import
 import base64
+import config
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 
 app = Flask(__name__)
 video_stream = None
@@ -114,6 +121,48 @@ def done():
     if video_stream:
         video_stream.stop()
         video_stream = None
+    
+    # Send attendance email if class was selected
+    if selected_class:
+        try:
+            # Setup email
+            email_sender = config.email_sender
+            password = config.password
+            receiver_email = config.receiver_email
+            
+            # Create message
+            msg = MIMEMultipart()
+            msg['From'] = email_sender
+            msg['To'] = receiver_email
+            msg['Subject'] = f"Attendance Record for {selected_class}"
+            
+            # Add body
+            body = f"Please find attached the attendance record for {selected_class}."
+            msg.attach(MIMEText(body, 'plain'))
+            
+            # Attach attendance file
+            today = time.strftime('%d_%m_%Y')
+            record_file = f"data/Records/Record_{selected_class}_{today}.csv"
+            
+            if os.path.exists(record_file):
+                with open(record_file, 'rb') as attachment:
+                    part = MIMEBase('application', 'octet-stream')
+                    part.set_payload(attachment.read())
+                    encoders.encode_base64(part)
+                    part.add_header('Content-Disposition', f'attachment; filename="{os.path.basename(record_file)}"')
+                    msg.attach(part)
+                
+                # Send email
+                server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                server.login(email_sender, password)
+                text = msg.as_string()
+                server.sendmail(email_sender, receiver_email, text)
+                server.quit()
+                print("Attendance email sent successfully!")
+            
+        except Exception as e:
+            print(f"Error sending attendance email: {e}")
+    
     selected_class = None
     return redirect(url_for('index'))
 

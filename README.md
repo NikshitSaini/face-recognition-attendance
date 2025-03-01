@@ -15,6 +15,22 @@ A web-based attendance system using face recognition technology.
     └── Records/      # Attendance records
 ```
 
+## Config File Data-:
+'''
+import os
+#Replace File data below
+DEFAULT_EMAIL_SENDER = "SENDER_EMAIL_ADDRESS" #CHANGE ADDRESS
+DEFAULT_PASSWORD = "aaaaaaaaaaaaaaaa"  # 16 characters Googlr App password without spaces
+DEFAULT_RECEIVER = "RECEIVER_EMAIL_ADDRESS" #CHANGE ADDRESS
+
+email_sender = DEFAULT_EMAIL_SENDER
+password = DEFAULT_PASSWORD
+receiver_email = DEFAULT_RECEIVER
+if not all([email_sender, password, receiver_email]):
+    raise ValueError("Missing email configuration!")
+'''
+
+
 ## Features
 - Face detection and recognition
 - Class-wise attendance tracking
