@@ -4,6 +4,7 @@ A web-based attendance system using face recognition technology.
 
 ## Project Structure
 
+```
 ├── app.py              # Flask application
 ├── face.py            # Face recognition logic
 ├── config.py          # Configuration (not in repo)
@@ -12,6 +13,7 @@ A web-based attendance system using face recognition technology.
 └── data/             # Data directories
     ├── Images/       # Student images
     └── Records/      # Attendance records
+```
 
 ## Features
 - Face detection and recognition
