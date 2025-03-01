@@ -1,6 +1,6 @@
 # Face Recognition Attendance System
 
-A web-based attendance system using face recognition technology.
+A web-based attendance system using face recognition technology with automatic email notifications.
 
 ## Project Structure
 
@@ -57,6 +57,7 @@ mkdir -p "project pbl/Records"
 
 4. Add face images to `project pbl/Images` directory
 - Name format: `PersonName.jpg`
+- Just use in-build image saving feature after running program
 
 5. Run the application
 ```bash
