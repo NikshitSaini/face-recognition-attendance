@@ -16,6 +16,7 @@ A web-based attendance system using face recognition technology.
 ```
 
 ## Config File Data-:
+
 '''
 import os
 #Replace File data below
