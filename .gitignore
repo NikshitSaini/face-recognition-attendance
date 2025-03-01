@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Configuration
+config.py
+
+# Data directories
+data/Records/*
+data/Images/*
+!data/Images/.gitkeep
+!data/Records/.gitkeep
+
+# OS files
+.DS_Store
