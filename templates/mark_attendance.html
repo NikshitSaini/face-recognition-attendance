@@ -7,7 +7,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f0f0f0;
+            background-color: #e8f5ff;  /* Light blue background */
         }
         .container {
             max-width: 800px;
@@ -21,8 +21,9 @@
         .video-container {
             background-color: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
         #video-feed {
             max-width: 100%;
@@ -44,19 +45,20 @@
             background-color: #45a049;
         }
         .class-info {
-            background-color: #4CAF50;
+            background-color: #2196F3;  /* Bright blue */
             color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 15px 25px;
+            border-radius: 10px;
             display: inline-block;
             margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(33,150,243,0.3);
         }
         .done-btn {
-            background-color: #2196F3;
+            background-color: #f44336;  /* Vibrant red */
             color: white;
             padding: 12px 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
             text-decoration: none;
@@ -64,25 +66,30 @@
             margin-top: 20px;
         }
         .done-btn:hover {
-            background-color: #1976D2;
+            background-color: #d32f2f;  /* Darker red */
+            transform: translateY(-2px);
         }
         .button-container {
             margin-top: 20px;
         }
         .done-btn, .send-email-btn {
-            background-color: #2196F3;
-            color: white;
             padding: 12px 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
             margin: 0 10px;
+            transition: all 0.3s ease;
         }
         .send-email-btn {
-            background-color: #4CAF50;
+            background-color: #4CAF50;  /* Vibrant green */
+            color: white;
+        }
+        .send-email-btn:hover {
+            background-color: #43A047;  /* Darker green */
+            transform: translateY(-2px);
         }
     </style>
 </head>

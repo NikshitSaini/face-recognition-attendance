@@ -103,7 +103,7 @@ def Attendance(name, class_section):
         with open(record_file, 'a') as f:
             current_time = time.strftime('%H:%M:%S')
             f.write(f"{name},{current_time},{class_section}\n")
-        send_attendance_email(record_file,class_section)
+        # Removed send_attendance_email call from here
 
 
 def send_attendance_email(record_file,class_section):
