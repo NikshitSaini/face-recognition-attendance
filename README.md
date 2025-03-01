@@ -15,9 +15,9 @@ A web-based attendance system using face recognition technology.
     └── Records/      # Attendance records
 ```
 
-## Config File Data-:
+## Config File Data:
 
-'''
+```python
 import os
 #Replace File data below
 DEFAULT_EMAIL_SENDER = "SENDER_EMAIL_ADDRESS" #CHANGE ADDRESS
@@ -29,8 +29,7 @@ password = DEFAULT_PASSWORD
 receiver_email = DEFAULT_RECEIVER
 if not all([email_sender, password, receiver_email]):
     raise ValueError("Missing email configuration!")
-'''
-
+```
 
 ## Features
 - Face detection and recognition
