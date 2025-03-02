@@ -1,0 +1,46 @@
+.video-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+.class-info {
+    background-color: #2196F3;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(33,150,243,0.3);
+}
+.button-container {
+    margin-top: 20px;
+}
+.done-btn, .send-email-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+}
+.done-btn {
+    background-color: #f44336;
+    color: white;
+}
+.done-btn:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+}
+.send-email-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+.send-email-btn:hover {
+    background-color: #43A047;
+    transform: translateY(-2px);
+}
