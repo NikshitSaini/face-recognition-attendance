@@ -53,6 +53,14 @@ class VideoStream:
 
     def stop(self):
         self.stopped = True
+        # Add proper cleanup
+        if hasattr(self, 'video') and self.video is not None:
+            self.video.release()
+        cv2.destroyAllWindows()  # Close any open windows
+
+    def __del__(self):
+        # Ensure cleanup when object is destroyed
+        self.stop()
 
         
 def encode_faces():
@@ -169,72 +177,74 @@ if __name__ == "__main__":
 
     start_time = time.time()
 
-    while True:
-        if video_stream.stopped is True:
-            break
-        else :
-            frame = video_stream.read()
+    try:
+        while True:
+            if video_stream.stopped is True:
+                break
+            else :
+                frame = video_stream.read()
 
-            if video_frame:
-                face_locations = fr.face_locations(frame)
-                unknown_face_encodings = fr.face_encodings(frame, \
-                face_locations)
+                if video_frame:
+                    face_locations = fr.face_locations(frame)
+                    unknown_face_encodings = fr.face_encodings(frame, \
+                    face_locations)
 
-                face_names = []
-                for face_encoding in unknown_face_encodings:
-                    matches = fr.compare_faces(encoded_faces, \
-                    face_encoding)
-                    name = "Unknown"
+                    face_names = []
+                    for face_encoding in unknown_face_encodings:
+                        matches = fr.compare_faces(encoded_faces, \
+                        face_encoding)
+                        name = "Unknown"
 
-                    face_distances = fr.face_distance(encoded_faces,\
-                    face_encoding)
-                    try:
+                        face_distances = fr.face_distance(encoded_faces,\
+                        face_encoding)
+                        try:
 
-                        best_match_index = np.argmin(face_distances)
-                        if matches[best_match_index]:
-                            name = faces_name[best_match_index]
+                            best_match_index = np.argmin(face_distances)
+                            if matches[best_match_index]:
+                                name = faces_name[best_match_index]
 
-                        face_names.append(name)
-                    except:
-                        pass
+                            face_names.append(name)
+                        except:
+                            pass
 
-            video_frame = not video_frame
+                video_frame = not video_frame
 
-            for (top, right, bottom, left), name in zip(face_locations,\
-            face_names):
-                cv2.rectangle(frame, (left-20, top-20), (right+20, \
-                bottom+20), (0, 255, 0), 2)
+                for (top, right, bottom, left), name in zip(face_locations,\
+                face_names):
+                    cv2.rectangle(frame, (left-20, top-20), (right+20, \
+                    bottom+20), (0, 255, 0), 2)
+                    
+                    cv2.rectangle(frame, (left-20, bottom -15), \
+                    (right+20, bottom+20), (0, 255, 0), cv2.FILLED)
+                    font = cv2.FONT_HERSHEY_DUPLEX
                 
-                cv2.rectangle(frame, (left-20, bottom -15), \
-                (right+20, bottom+20), (0, 255, 0), cv2.FILLED)
-                font = cv2.FONT_HERSHEY_DUPLEX
-               
-                cv2.putText(frame, name, (left -20, bottom + 15), \
-                font, 0.85, (255, 255, 255), 2)
-                
-                
-                Attendance(name)
+                    cv2.putText(frame, name, (left -20, bottom + 15), \
+                    font, 0.85, (255, 255, 255), 2)
+                    
+                    
+                    Attendance(name)
 
-         
-        delay = 0.04
-        time.sleep(delay)
+            
+            delay = 0.04
+            time.sleep(delay)
 
-        if has_gui:
-            try:
-                cv2.imshow('frame' , frame)
-                key = cv2.waitKey(1)
-                if key == ord('q'):
+            if has_gui:
+                try:
+                    cv2.imshow('frame' , frame)
+                    key = cv2.waitKey(1)
+                    if key == ord('q'):
+                        break
+                except Exception as e:
+                    print(f"Error displaying frame: {e}")
                     break
-            except Exception as e:
-                print(f"Error displaying frame: {e}")
-                break
-        else:
-            if time.time() - start_time > 60:
-                break
-
-    video_stream.stop()
-    
-    if has_gui:
+            else:
+                if time.time() - start_time > 60:
+                    break
+    except KeyboardInterrupt:
+        print("\nExiting gracefully...")
+    finally:
+        if video_stream:
+            video_stream.stop()
         cv2.destroyAllWindows()
 
     email_sender = config.email_sender
